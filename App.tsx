@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import realm, { getAllTodos, addTodo, deleteTodo } from './databases/realm';
 
 interface IToDo {
   text: string;
@@ -43,13 +44,13 @@ export default function App() {
           }}
           style={styles.inputBox}
         />
-        <Button title="Add Task" onPress={handleSubmit} />
+        <Button title="Add Task" onPress={addTodo} />
       </View>
       {error && (
         <Text style={styles.error}>Error: Input field is empty...</Text>
       )}
       <Text style={styles.subtitle}>Your Tasks :</Text>
-      {toDoList.length === 0 && <Text>No to do task available</Text>}
+      {toDoList.length === 0 && <Text>{JSON.stringify(getAllTodos())}</Text>}
       {toDoList.map((toDo: IToDo, index: number) => (
         <View style={styles.listItem} key={`${index}_${toDo.text}`}>
           <Text
@@ -67,7 +68,7 @@ export default function App() {
           <Button
             title="X"
             onPress={() => {
-              removeItem(index);
+              deleteTodo();
             }}
             color="crimson"
           />
